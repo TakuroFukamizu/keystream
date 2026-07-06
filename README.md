@@ -45,31 +45,31 @@ USBメモリや独自デバイスドライバが利用できない管理PCに対
 
 ## システム構成
 
-```text
-Browser
-    │
-HTTP / Wi-Fi (Client Mode)
-    │
-    ▼
-+-----------------------+
-|     KeyStream         |
-|  M5Stack CoreS3       |
-|                       |
-|  HTTP Server          |
-|  Display UI           |
-|  History              |
-|  USB HID Keyboard     |
-+-----------+-----------+
-            │ USB
-            ▼
-Managed Windows PC
+```mermaid
+flowchart TD
+    Browser[ブラウザ (PC / スマホ)]
+    
+    subgraph M5 [KeyStream / M5Stack CoreS3]
+        Server[HTTP Server]
+        UI[Display UI / タッチ操作]
+        History[送信履歴 (最大3件)]
+        USB[USB HID Keyboard]
+    end
+    
+    PC[接続先PC (管理PC)]
+    
+    Browser -->|HTTP / Wi-Fi (STA)| Server
+    Server -->|保留データ表示| UI
+    UI -->|タップ送信 / 再送| USB
+    USB -->|入力履歴の保存| History
+    USB -->|USB物理接続 / キー入力| PC
 ```
 
 ---
 
 ## Wi-Fi設定方法
 
-本デバイスが既存 of Wi-Fiネットワークにクライアントとして接続するための設定は、`src/wifi_credentials.h` で行います。
+本デバイスが既存のWi-Fiネットワークにクライアントとして接続するための設定は、`src/wifi_credentials.h` で行います。
 このファイルはローカル専用の情報であり、`.gitignore` に登録されているため、Gitでコミットされることはありません。
 
 1. `src/wifi_credentials.h.template` をコピーして `src/wifi_credentials.h` を作成します。
@@ -197,24 +197,24 @@ The primary goal is to work with managed or security-restricted PCs where:
 
 ## Architecture
 
-```text
-Browser
-    │
-HTTP / Wi-Fi (Client Mode)
-    │
-    ▼
-+-----------------------+
-|      KeyStream        |
-|      ESP32-S3         |
-|                       |
-| HTTP Server           |
-| Display UI            |
-| History               |
-| USB HID Keyboard      |
-+-----------+-----------+
-            │ USB
-            ▼
-Managed Windows PC
+```mermaid
+flowchart TD
+    Browser[Browser (PC / Phone)]
+    
+    subgraph M5 [KeyStream / M5Stack CoreS3]
+        Server[HTTP Server]
+        UI[Display UI / Touch Control]
+        History[Transmission History]
+        USB[USB HID Keyboard]
+    end
+    
+    PC[Target PC (Managed PC)]
+    
+    Browser -->|HTTP / Wi-Fi (STA)| Server
+    Server -->|Queue Data| UI
+    UI -->|Tap to Send / Resend| USB
+    USB -->|Save Entry| History
+    USB -->|USB Key Input| PC
 ```
 
 ---
