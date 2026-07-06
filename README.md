@@ -47,18 +47,18 @@ USBメモリや独自デバイスドライバが利用できない管理PCに対
 
 ```mermaid
 flowchart TD
-    Browser[ブラウザ (PC / スマホ)]
+    Browser["ブラウザ (PC / スマホ)"]
     
     subgraph M5 [KeyStream / M5Stack CoreS3]
         Server[HTTP Server]
-        UI[Display UI / タッチ操作]
-        History[送信履歴 (最大3件)]
+        UI["Display UI / タッチ操作"]
+        History["送信履歴 (最大3件)"]
         USB[USB HID Keyboard]
     end
     
-    PC[接続先PC (管理PC)]
+    PC["接続先PC (管理PC)"]
     
-    Browser -->|HTTP / Wi-Fi (STA)| Server
+    Browser -->|HTTP / Wi-Fi STA| Server
     Server -->|保留データ表示| UI
     UI -->|タップ送信 / 再送| USB
     USB -->|入力履歴の保存| History
@@ -199,18 +199,18 @@ The primary goal is to work with managed or security-restricted PCs where:
 
 ```mermaid
 flowchart TD
-    Browser[Browser (PC / Phone)]
+    Browser["Browser (PC / Phone)"]
     
     subgraph M5 [KeyStream / M5Stack CoreS3]
         Server[HTTP Server]
-        UI[Display UI / Touch Control]
+        UI["Display UI / Touch Control"]
         History[Transmission History]
         USB[USB HID Keyboard]
     end
     
-    PC[Target PC (Managed PC)]
+    PC["Target PC (Managed PC)"]
     
-    Browser -->|HTTP / Wi-Fi (STA)| Server
+    Browser -->|HTTP / Wi-Fi STA| Server
     Server -->|Queue Data| UI
     UI -->|Tap to Send / Resend| USB
     USB -->|Save Entry| History
@@ -289,7 +289,7 @@ KeyStream intentionally exposes only a single USB interface:
 
 * USB HID Keyboard
 
-The following USB classes are intentionally disabled during execution:
+ the following USB classes are intentionally disabled during execution:
 
 * USB Mass Storage
 * USB CDC Serial
